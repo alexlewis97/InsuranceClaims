@@ -15,7 +15,6 @@ export default function Navbar({ session, profile, onSignOut, skipAuth }) {
             {isAdmin ? (
               <>
                 <Link to="/admin" className="hover:text-blue-300">לוח בקרה</Link>
-                <Link to="/provision" className="hover:text-blue-300">הקמה</Link>
               </>
             ) : (
               <>
@@ -30,7 +29,6 @@ export default function Navbar({ session, profile, onSignOut, skipAuth }) {
         ) : (
           <Link to="/login" className="hover:text-blue-300">כניסה</Link>
         )}
-        <Link to="/provision" className="hover:text-blue-300 text-xs text-gray-400">הקמה</Link>
       </div>
     </nav>
   );

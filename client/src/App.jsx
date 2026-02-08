@@ -8,7 +8,6 @@ import Login from './pages/Login';
 import FileClaim from './pages/FileClaim';
 import MyClaims from './pages/MyClaims';
 import AdminDashboard from './pages/AdminDashboard';
-import Provision from './pages/Provision';
 
 const skipAuth = import.meta.env.VITE_SKIP_AUTH === 'true';
 
@@ -56,7 +55,6 @@ export default function App() {
       <Navbar session={session} profile={profile} onSignOut={handleSignOut} skipAuth={skipAuth} />
       <Routes>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login onAuth={() => {}} />} />
-        <Route path="/provision" element={<Provision />} />
         <Route path="/file-claim" element={isAuthenticated ? <FileClaim /> : <Navigate to="/login" />} />
         <Route path="/my-claims" element={isAuthenticated ? <MyClaims /> : <Navigate to="/login" />} />
         <Route path="/admin" element={isAuthenticated? <AdminDashboard /> : <Navigate to="/" />} />

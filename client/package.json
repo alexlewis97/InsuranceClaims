@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "provision": "node scripts/provision.js",
+    "dev": "node scripts/provision.js && vite",
+    "build": "node scripts/provision.js && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
