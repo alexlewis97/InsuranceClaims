@@ -10,33 +10,41 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+c
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Parse .env manually (no extra deps needed)
-function loadEnv() {
-  try {
-    const envPath = resolve(__dirname, '..', '.env');
-    const content = readFileSync(envPath, 'utf-8');
-    const vars = {};
-    for (const line of content.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const [key, ...rest] = trimmed.split('=');
-      vars[key.trim()] = rest.join('=').trim();
+function loadEnvIfPresent() {
+  const envPath = resolve(__dirname, '..', '.env');
+
+  if (!existsSync(envPath)) {
+    return; // Cloud / CI / Vercel — totally fine
+  }
+
+  const content = readFileSync(envPath, 'utf-8');
+
+  for (const line of content.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    const [key, ...rest] = trimmed.split('=');
+    const value = rest.join('=').trim();
+
+    // Do NOT overwrite already-set env vars
+    if (!(key in process.env)) {
+      process.env[key] = value;
     }
-    return vars;
-  } catch {
-    console.error('ERROR: Could not read .env file');
-    process.exit(1);
   }
 }
 
-const env = loadEnv();
-const SUPABASE_URL = env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = env.VITE_SUPABASE_ANON_KEY;
+// Load local .env if it exists
+loadEnvIfPresent();
+
+// Now always read from process.env
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.error('ERROR: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set in .env');
+  console.error('ERROR: Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY');
   process.exit(1);
 }
 
