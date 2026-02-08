@@ -6,10 +6,9 @@
  * Requires: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
